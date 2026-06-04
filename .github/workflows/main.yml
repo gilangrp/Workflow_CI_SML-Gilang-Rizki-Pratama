@@ -56,10 +56,16 @@ jobs:
           python MLproject/upload_to_gdrive.py
 
           
-      # Build Docker Model
+# Build Docker Model
       - name: Build Docker Model
         run: |
-          mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "cc" 
+          # Generate Dockerfile
+          mlflow models generate-dockerfile --model-uri "runs:/$RUN_ID/model" --output-directory docker_build
+          
+          # Ganti URL get-pip.py yang error agar mengarah ke versi khusus Python 3.9
+          sed -i 's|https://bootstrap.pypa.io/get-pip.py|https://bootstrap.pypa.io/pip/3.9/get-pip.py|g' docker_build/Dockerfile
+          
+          docker build -t cc docker_build/
 
       # Login to Docker Hub
       - name: Log in to Docker Hub
