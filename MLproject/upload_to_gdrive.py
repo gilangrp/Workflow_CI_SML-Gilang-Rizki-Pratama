@@ -1,21 +1,21 @@
 import os
 import json
-from google.oauth2.service_account import Credentials
+from google.oauth2.credentials import Credentials # Ubah import ini
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
-# 1. Load credential service account
-creds = json.loads(os.environ["GDRIVE_CREDENTIALS"])
-credentials = Credentials.from_service_account_info(
-    creds,
+# 1. Load token dari GitHub Secrets
+token_data = json.loads(os.environ["GDRIVE_TOKEN_JSON"])
+credentials = Credentials.from_authorized_user_info(
+    token_data, 
     scopes=["https://www.googleapis.com/auth/drive"]
 )
 
 # 2. Build Drive API
 service = build('drive', 'v3', credentials=credentials)
 
-# 3. Gunakan ID Shared Drive (atau folder di Shared Drive) sebagai "parent"
-SHARED_DRIVE_ID = os.environ["GDRIVE_FOLDER_ID"]
+# 3. Gunakan ID Folder dari Secret
+PARENT_DRIVE_ID = os.environ["GDRIVE_FOLDER_ID"]
 
 # Pastikan service account sudah diundang ke Shared Drive sebagai Content Manager / Manager / Editor
 
