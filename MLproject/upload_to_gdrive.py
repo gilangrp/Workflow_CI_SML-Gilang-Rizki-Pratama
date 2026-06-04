@@ -70,7 +70,7 @@ for run_id in os.listdir(local_mlruns_0):
         run_id_folder_meta = {
             'name': run_id,
             'mimeType': 'application/vnd.google-apps.folder',
-            'parents': [SHARED_DRIVE_ID]
+            'parents': [PARENT_DRIVE_ID]
         }
         run_id_folder = service.files().create(
             body=run_id_folder_meta,
@@ -80,7 +80,6 @@ for run_id in os.listdir(local_mlruns_0):
         run_id_folder_id = run_id_folder["id"]
         print(f"=== Created run_id folder: {run_id} (ID: {run_id_folder_id}) ===")
 
-        # Upload isinya (subfolder, file) secara rekursif
         upload_directory(run_id_local_path, run_id_folder_id)
 
 print("=== All run_id folders and files have been uploaded directly to Shared Drive! ===")
